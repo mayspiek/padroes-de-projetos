@@ -17,12 +17,17 @@ class Player(ABC):
     def exibir(self):
         print(f'| [Player]Nome: {self.name} - HP: {self.hp} - Defesa: {self.defense} |\n')
 
-class NPCFactory(ABC):
+class Factory(ABC):
+    @abstractmethod
+    def create(self, *args):
+        return self
+
+class NPCFactory(Factory):
     @abstractmethod
     def create(name, damage):
         return NPC(name, damage)
         
-class PlayerFactory(ABC):
+class PlayerFactory(Factory):
     @abstractmethod
     def create(name, hp, defense):
         return Player(name, hp, defense)
