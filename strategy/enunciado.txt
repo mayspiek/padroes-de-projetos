@@ -1,0 +1,25 @@
+Implementar e apresentar o código para o professor.
+
+
+
+Implementar 3 formas de envio (aérea, express, correios) de mercadorias utilizando o padrão de projeto Strategy. 
+
+- Aérea: 1kg = R$ 25,00
+
+- express: 1kg = R$ 15,00
+
+- correios: 1kg = R$ 10,00
+
+
+
+Exemplo:
+
+- valor do produto: R$ 100,00
+
+- peso do produto: 2kg
+
+- frete escolhido: aereo
+
+- TOTAL: R$ 150,00
+
+Calcular o valor total do produto, considerando o valor do produto + frete.
