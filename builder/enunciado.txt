@@ -1,0 +1,18 @@
+Implementar e apresentar o código para o professor.
+
+Proponha um builder para a construção de um objeto que representa as permissões ou ações que um usuário pode realizar em um sistema. Por exemplo, considere os seguintes tipos de permissões existentes para o usuário Admin e o usuário padrão:
+
+Permissões do Admin
+
+Remover usuários
+Editar usuários
+Cadastrar empresa
+Remover empresa
+Resetar senha de outros usuários
+Permissões do Usuário
+
+Editar perfil
+Cadastrar empresa
+Resetar própria senha
+
+// builder prove a implementação das etapas, diretor define a ordem que executa

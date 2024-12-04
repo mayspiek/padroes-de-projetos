@@ -1,0 +1,85 @@
+{
+    "quiz": {
+      "dificuldade": {
+        "facil": {
+          "geral": [
+          {
+            "pergunta": "Qual país ganhou a Copa do Mundo de 2014?",
+            "alternativas": ["Alemanha", "Brasil", "Argentina", "França"],
+            "resposta": "Alemanha"
+          },
+          {
+            "pergunta": "Quem é conhecido como 'O Rei do Futebol'?",
+            "alternativas": ["Pelé", "Maradona", "Cristiano Ronaldo", "Messi"],
+            "resposta": "Pelé"
+          }
+        ],
+        "clubes": [
+          {
+            "pergunta": "Qual clube é conhecido como 'O Mais Querido' do Brasil?",
+            "alternativas": ["Flamengo", "Palmeiras", "São Paulo", "Corinthians"],
+            "resposta": "Flamengo"
+          },
+          {
+            "pergunta": "Qual é o nome do estádio do Manchester United?",
+            "alternativas": ["Etihad Stadium", "Old Trafford", "Wembley", "Anfield"],
+            "resposta": "Old Trafford"
+          }
+        ]
+        },
+        "medio": {
+          "geral": [
+          {
+            "pergunta": "Qual jogador detém o recorde de gols em Copas do Mundo?",
+            "alternativas": ["Ronaldo", "Gerd Müller", "Mário Götze", "Miroslav Klose"],
+            "resposta": "Miroslav Klose"
+          },
+          {
+            "pergunta": "Em que ano o futebol feminino foi incluído nas Olimpíadas?",
+            "alternativas": ["1988", "1996", "2000", "2004"],
+            "resposta": "1996"
+          }
+        ],
+        "clubes": [
+          {
+            "pergunta": "Qual clube espanhol tem mais títulos da Liga dos Campeões da UEFA?",
+            "alternativas": ["Barcelona", "Real Madrid", "Atlético de Madrid", "Sevilla"],
+            "resposta": "Real Madrid"
+          },
+          {
+            "pergunta": "Quem é o maior artilheiro da história da Premier League?",
+            "alternativas": ["Alan Shearer", "Wayne Rooney", "Thierry Henry", "Sergio Agüero"],
+            "resposta": "Alan Shearer"
+          }
+        ]
+        },
+        "dificil": {
+          "geral": [
+          {
+            "pergunta": "Qual país foi o primeiro a sediar duas Copas do Mundo?",
+            "alternativas": ["França", "Itália", "Brasil", "México"],
+            "resposta": "México"
+          },
+          {
+            "pergunta": "Qual jogador é conhecido por sua famosa 'cavadinha'?",
+            "alternativas": ["Ronaldinho", "Zico", "Pelé", "Messi"],
+            "resposta": "Ronaldinho"
+          }
+        ],
+        "clubes": [
+          {
+            "pergunta": "Qual foi o primeiro clube a ganhar a Liga dos Campeões da UEFA?",
+            "alternativas": ["Real Madrid", "AC Milan", "Celtic", "Ajax"],
+            "resposta": "Real Madrid"
+          },
+          {
+            "pergunta": "Qual clube possui a maior torcida do mundo?",
+            "alternativas": ["Barcelona", "Flamengo", "Manchester United", "Boca Juniors"],
+            "resposta": "Flamengo"
+          }
+        ]
+        }
+      }
+    }
+  }
+  
