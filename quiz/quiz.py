@@ -1,128 +1,151 @@
 import json
-import random
+from abc import ABC, abstractmethod
 
-letras = ['a', 'b', 'c', 'd']
-
+# Singleton para garantir que só haja uma instância do Quiz
 class Quiz:
+    _instance = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(Quiz, cls).__new__(cls)
+            cls._instance._dados = None
+        return cls._instance
+
+    def carregar_dados(self, caminho_arquivo):
+        with open(caminho_arquivo, 'r', encoding='utf-8') as arquivo:
+            self._dados = json.load(arquivo)
+
+    @property
+    def dados(self):
+        if self._dados is None:
+            raise ValueError("Os dados do quiz ainda não foram carregados.")
+        return self._dados
+
+
+# Builder para construir quizzes com base na dificuldade e categoria
+class QuizBuilder:
     def __init__(self):
-        with open('./quiz.json', 'r', encoding='utf-8') as arquivo:
-            dados = json.load(arquivo)
-            
-        self.dificuldades = {}
+        self.dificuldade = None
+        self.categoria = None
+
+    def set_dificuldade(self, dificuldade):
+        if(dificuldade == "1"):
+            dificuldade = "facil"
+        elif(dificuldade == "2"):
+            dificuldade = "medio"
+        elif(dificuldade == "3"):
+            dificuldade = "dificil"
+        else: 
+            raise ValueError("Dificuldade inválida")
+        self.dificuldade = dificuldade
+        return self
+
+    def set_categoria(self, categoria):
+        if(categoria == "1"):
+            categoria = "geral"
+        elif(categoria == "2"):
+            categoria = "clubes"
+        else: 
+            raise ValueError("Categoria inválida")
+        self.categoria = categoria
+        return self
+
+    def construir(self):
+        if not self.dificuldade or not self.categoria:
+            raise ValueError("Dificuldade e categoria devem ser definidas.")
         
-        for dificuldade, categorias in dados["quiz"].items():
-            self.dificuldades[dificuldade] = {}
-            print(dados["quiz"])
-            for categorias, perguntas in categorias.items():
-                # categorias = set(categorias)
-                print(f'Categoria: {categorias}')
-                pass
-                # print(categorias)
-        #     for categoria, perguntas in categorias.items():
-        #         self.dificuldades[dificuldade][categoria] = Categoria(categoria, perguntas)
-    
-    def selecionar_dificuldade(self):
-        """Seleciona a dificuldade do quiz"""
-        dificuldades = list(self.dificuldades.keys())
-        escolha = input(f"Escolha a dificuldade ({', '.join(dificuldades)}): ").lower()
-        if escolha in dificuldades:
-            return escolha
-        else:
-            print("Dificuldade inválida!")
-            return self.selecionar_dificuldade()
-    
-    def selecionar_categoria(self, dificuldade):
-        """Seleciona a categoria do quiz"""
-        categorias = list(self.dificuldades[dificuldade].keys())
-        escolha = input(f"Escolha a categoria ({', '.join(categorias)}): ").lower()
-        if escolha in categorias:
-            return escolha
-        else:
-            print("Categoria inválida!")
-            return self.selecionar_categoria(dificuldade)
-    
-    def iniciar_quiz(self):
-        """Inicia o quiz permitindo o usuário escolher dificuldade e categoria"""
-        dificuldade = self.selecionar_dificuldade()
-        categoria = self.selecionar_categoria(dificuldade)
-        self.dificuldades[dificuldade][categoria].exibir_perguntas()
+        quiz = Quiz()
+        perguntas = quiz.dados["quiz"]["dificuldade"].get(self.dificuldade, {}).get(self.categoria, [])
+        return Categoria(self.categoria, perguntas)
 
-class Pergunta:
-    def __init__(self, pergunta, alternativas, resposta):
-        self.pergunta = pergunta
-        self.alternativas = alternativas
-        self.resposta = resposta
 
+# Categoria representa um conjunto de perguntas
 class Categoria:
     def __init__(self, nome, perguntas):
         self.nome = nome
-        self.perguntas = [Pergunta(p["pergunta"], p["alternativas"], p["resposta"]) for p in perguntas]
+        self.perguntas = [PerguntaFactory.criar(p) for p in perguntas]
 
-    def exibir_perguntas(self):
-        for pergunta in self.perguntas:
-            print(f'{pergunta}')
 
-            alternativas_embaralhadas = self.alternativas.copy()
-            random.shuffle(alternativas_embaralhadas)
-            
-            for i, alt in enumerate(alternativas_embaralhadas):
-                print(f'{letras[i]}) {alt}')
-            return alternativas_embaralhadas
+# Factory para criar instâncias de Pergunta
+class PerguntaFactory:
+    @staticmethod
+    def criar(dados_pergunta):
+        return Pergunta(
+            pergunta=dados_pergunta["pergunta"],
+            alternativas=dados_pergunta["alternativas"]
+        )
 
-    def verificar_resposta(self, resposta_usuario, alternativas_embaralhadas):
-        index_escolhido = letras.index(resposta_usuario)
-        alternativa_escolhida = alternativas_embaralhadas[index_escolhido]
-        if alternativa_escolhida == self.resposta:
-            return print('\nResposta certa!')
-        else:
-            return print('\nResposta errada!')
 
-    def escolher_resposta(self, alternativas_embaralhadas):
-        resposta_usuario = input("Escolha a alternativa (a, b, c, d): ").lower()
-        index_escolhido = letras.index(resposta_usuario)
-        alternativa_escolhida = alternativas_embaralhadas[index_escolhido]
-        return alternativa_escolhida
+class Pergunta:
+    def __init__(self, pergunta, alternativas):
+        self.pergunta = pergunta
+        self.alternativas = alternativas
 
+    def exibir(self):
+        print(f"\n{self.pergunta}")
+        for i, alt in enumerate(self.alternativas, start=1):
+            print(f"{i}. {alt['alt']}")
+
+    def verificar_resposta(self, indice_resposta):
+        return self.alternativas[indice_resposta]["correct"]
+
+
+# Observer para pontuação
+class ObservadorPontuacao(ABC):
+    @abstractmethod
+    def atualizar(self, acertos, total):
+        pass
+
+
+class Pontuacao(ObservadorPontuacao):
+    def __init__(self):
+        self.acertos = 0
+        self.erros = 0
+
+    def atualizar(self, acertos, total):
+        self.acertos += acertos
+        self.erros += total - acertos
+
+    def exibir_resultado(self):
+        print("\nRESULTADO FINAL:")
+        print(f"Acertos: {self.acertos}")
+        print(f"Erros: {self.erros}")
+
+
+# Classe para gerenciar o fluxo do quiz
+class GerenciadorQuiz:
+    def __init__(self, categoria):
+        self.categoria = categoria
+        self.pontuacao = Pontuacao()
+
+    def iniciar(self):
+        total_perguntas = len(self.categoria.perguntas)
+        acertos = 0
+
+        for pergunta in self.categoria.perguntas:
+            pergunta.exibir()
+            resposta = int(input("Escolha a resposta (número): ")) - 1
+            if pergunta.verificar_resposta(resposta):
+                print("Correto!")
+                acertos += 1
+            else:
+                print("Errado!")
+
+        self.pontuacao.atualizar(acertos, total_perguntas)
+        self.pontuacao.exibir_resultado()
+
+
+
+# Exemplo de uso
 if __name__ == '__main__':
     quiz = Quiz()
-    # with open('./quiz.json') as f:
-    #     data = json.load(f)
+    quiz.carregar_dados('./quiz.json')
+
+    builder = QuizBuilder()
     
-    # print('Quiz de Futebol')
-    # print('Escolha a dificuldade')
-    # print('| 1 - Fácil | 2 - Médio | 3 - Difícil |')
-    # dificuldade = int(input())
+    dificuldade = input("Escolha a dificuldade (1 - Fácil, 2 - Médio, 3 - Difícil): ")
+    categoria = input("Escolha a categoria (1 - Geral, 2 - Clubes): ")
+    quizbuildado = builder.set_dificuldade(dificuldade).set_categoria(categoria).construir()
 
-    # if dificuldade == 1:
-    #     print('Dificuldade Fácil')
-    #     print('Selecione a categoria')
-
-    #     print('| 1 - Clubes | 2 - Geral |')
-    #     categoria = int(input())
-
-    #     print('Responda as perguntas abaixo')
-
-    #     # pega as perguntas da categoria geral
-    #     for i in data['quiz']['facil']['geral']:
-    #         print(f'{i["pergunta"]}')
-    #         letras = ['a', 'b', 'c', 'd']
-
-    #         # embaralha as alternativas
-    #         alternativas = i['alternativas']
-    #         random.shuffle(alternativas)
-
-    #         # exibe as alternativas
-    #         for i, alt in enumerate(alternativas):
-    #             print(f'{letras[i]}) {alt}')
-    #          # Pede a escolha do usuário
-    #         resposta_usuario = input("Escolha a alternativa (a, b, c, d): ").lower()
-            
-    #         # Descobre qual alternativa o usuário escolheu
-    #         index_escolhido = letras.index(resposta_usuario)
-    #         alternativa_escolhida = alternativas[index_escolhido]
-            
-    #         # Compara com a resposta correta
-    #         if alternativa_escolhida == i['resposta']:
-    #             print("Correto!")
-    #         else:
-    #             print(f"Errado! A resposta correta é: {i['resposta']}")
+    gerenciador = GerenciadorQuiz(quizbuildado)
+    gerenciador.iniciar()
