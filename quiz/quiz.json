@@ -3,81 +3,129 @@
     "dificuldade": {
       "facil": {
         "geral": [
-        {
-          "pergunta": "Qual país ganhou a Copa do Mundo de 2014?",
-          "alternativas": ["Alemanha", "Brasil", "Argentina", "França"],
-          "resposta": "Alemanha"
-        },
-        {
-          "pergunta": "Quem é conhecido como 'O Rei do Futebol'?",
-          "alternativas": ["Pelé", "Maradona", "Cristiano Ronaldo", "Messi"],
-          "resposta": "Pelé"
-        }
-      ],
-      "clubes": [
-        {
-          "pergunta": "Qual clube é conhecido como 'O Mais Querido' do Brasil?",
-          "alternativas": ["Flamengo", "Palmeiras", "São Paulo", "Corinthians"],
-          "resposta": "Flamengo"
-        },
-        {
-          "pergunta": "Qual é o nome do estádio do Manchester United?",
-          "alternativas": ["Etihad Stadium", "Old Trafford", "Wembley", "Anfield"],
-          "resposta": "Old Trafford"
-        }
-      ]
+          {
+            "pergunta": "Qual país ganhou a Copa do Mundo de 2014?",
+            "alternativas": [
+              {"alt": "Alemanha", "correct": true},
+              {"alt": "Brasil", "correct": false},
+              {"alt": "Argentina", "correct": false},
+              {"alt": "França", "correct": false}
+            ]
+          },
+          {
+            "pergunta": "Quem é conhecido como 'O Rei do Futebol'?",
+            "alternativas": [
+              {"alt": "Pelé", "correct": true},
+              {"alt": "Maradona", "correct": false},
+              {"alt": "Cristiano Ronaldo", "correct": false},
+              {"alt": "Messi", "correct": false}
+            ]
+          }
+        ],
+        "clubes": [
+          {
+            "pergunta": "Qual clube é conhecido como 'O Mais Querido' do Brasil?",
+            "alternativas": [
+              {"alt": "Flamengo", "correct": true},
+              {"alt": "Palmeiras", "correct": false},
+              {"alt": "São Paulo", "correct": false},
+              {"alt": "Corinthians", "correct": false}
+            ]
+          },
+          {
+            "pergunta": "Qual é o nome do estádio do Manchester United?",
+            "alternativas": [
+              {"alt": "Etihad Stadium", "correct": false},
+              {"alt": "Old Trafford", "correct": true},
+              {"alt": "Wembley", "correct": false},
+              {"alt": "Anfield", "correct": false}
+            ]
+          }
+        ]
       },
       "medio": {
         "geral": [
-        {
-          "pergunta": "Qual jogador detém o recorde de gols em Copas do Mundo?",
-          "alternativas": ["Ronaldo", "Gerd Müller", "Mário Götze", "Miroslav Klose"],
-          "resposta": "Miroslav Klose"
-        },
-        {
-          "pergunta": "Em que ano o futebol feminino foi incluído nas Olimpíadas?",
-          "alternativas": ["1988", "1996", "2000", "2004"],
-          "resposta": "1996"
-        }
-      ],
-      "clubes": [
-        {
-          "pergunta": "Qual clube espanhol tem mais títulos da Liga dos Campeões da UEFA?",
-          "alternativas": ["Barcelona", "Real Madrid", "Atlético de Madrid", "Sevilla"],
-          "resposta": "Real Madrid"
-        },
-        {
-          "pergunta": "Quem é o maior artilheiro da história da Premier League?",
-          "alternativas": ["Alan Shearer", "Wayne Rooney", "Thierry Henry", "Sergio Agüero"],
-          "resposta": "Alan Shearer"
-        }
-      ]
+          {
+            "pergunta": "Qual jogador detém o recorde de gols em Copas do Mundo?",
+            "alternativas": [
+              {"alt": "Ronaldo", "correct": false},
+              {"alt": "Gerd Müller", "correct": false},
+              {"alt": "Mário Götze", "correct": false},
+              {"alt": "Miroslav Klose", "correct": true}
+            ]
+          },
+          {
+            "pergunta": "Em que ano o futebol feminino foi incluído nas Olimpíadas?",
+            "alternativas": [
+              {"alt": "1988", "correct": false},
+              {"alt": "1996", "correct": true},
+              {"alt": "2000", "correct": false},
+              {"alt": "2004", "correct": false}
+            ]
+          }
+        ],
+        "clubes": [
+          {
+            "pergunta": "Qual clube espanhol tem mais títulos da Liga dos Campeões da UEFA?",
+            "alternativas": [
+              {"alt": "Barcelona", "correct": false},
+              {"alt": "Real Madrid", "correct": true},
+              {"alt": "Atlético de Madrid", "correct": false},
+              {"alt": "Sevilla", "correct": false}
+            ]
+          },
+          {
+            "pergunta": "Quem é o maior artilheiro da história da Premier League?",
+            "alternativas": [
+              {"alt": "Alan Shearer", "correct": true},
+              {"alt": "Wayne Rooney", "correct": false},
+              {"alt": "Thierry Henry", "correct": false},
+              {"alt": "Sergio Agüero", "correct": false}
+            ]
+          }
+        ]
       },
       "dificil": {
         "geral": [
-        {
-          "pergunta": "Qual país foi o primeiro a sediar duas Copas do Mundo?",
-          "alternativas": ["França", "Itália", "Brasil", "México"],
-          "resposta": "México"
-        },
-        {
-          "pergunta": "Qual jogador é conhecido por sua famosa 'cavadinha'?",
-          "alternativas": ["Ronaldinho", "Zico", "Pelé", "Messi"],
-          "resposta": "Ronaldinho"
-        }
-      ],
-      "clubes": [
-        {
-          "pergunta": "Qual foi o primeiro clube a ganhar a Liga dos Campeões da UEFA?",
-          "alternativas": ["Real Madrid", "AC Milan", "Celtic", "Ajax"],
-          "resposta": "Real Madrid"
-        },
-        {
-          "pergunta": "Qual clube possui a maior torcida do mundo?",
-          "alternativas": ["Barcelona", "Flamengo", "Manchester United", "Boca Juniors"],
-          "resposta": "Flamengo"
-        }
-      ]
+          {
+            "pergunta": "Qual país foi o primeiro a sediar duas Copas do Mundo?",
+            "alternativas": [
+              {"alt": "França", "correct": false},
+              {"alt": "Itália", "correct": false},
+              {"alt": "Brasil", "correct": false},
+              {"alt": "México", "correct": true}
+            ]
+          },
+          {
+            "pergunta": "Qual jogador é conhecido por sua famosa 'cavadinha'?",
+            "alternativas": [
+              {"alt": "Ronaldinho", "correct": true},
+              {"alt": "Zico", "correct": false},
+              {"alt": "Pelé", "correct": false},
+              {"alt": "Messi", "correct": false}
+            ]
+          }
+        ],
+        "clubes": [
+          {
+            "pergunta": "Qual foi o primeiro clube a ganhar a Liga dos Campeões da UEFA?",
+            "alternativas": [
+              {"alt": "Real Madrid", "correct": true},
+              {"alt": "AC Milan", "correct": false},
+              {"alt": "Celtic", "correct": false},
+              {"alt": "Ajax", "correct": false}
+            ]
+          },
+          {
+            "pergunta": "Qual clube possui a maior torcida do mundo?",
+            "alternativas": [
+              {"alt": "Barcelona", "correct": false},
+              {"alt": "Flamengo", "correct": true},
+              {"alt": "Manchester United", "correct": false},
+              {"alt": "Boca Juniors", "correct": false}
+            ]
+          }
+        ]
       }
     }
   }
