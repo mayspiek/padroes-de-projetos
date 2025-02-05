@@ -68,18 +68,28 @@ class PermissionsBuilder():
         self.user.permissions.append('Permição de resetar própria senha.')
         return self
     
+    def edit_self_permission(self):
+        self.user.permissions.append('Permição de editar própria conta.')
+        return self
+    
     def build(self):
         return self.user
     
 if __name__ == '__main__':
     admin = (PermissionsBuilder('João', 'Admin')
+                .remove_user_permission()
                .edit_user_permission()
                .add_company_permission()
                .remove_company_permission()
                .change_others_password_permission()
-               .reset_password_permission()
                .build())
     
     admin.show_permissions()
     
+    user = (PermissionsBuilder('Maria', 'User')
+               .edit_self_permission()
+               .add_company_permission()
+               .reset_password_permission()
+               .build())
     
+    user.show_permissions()
