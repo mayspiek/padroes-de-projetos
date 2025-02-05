@@ -1,7 +1,7 @@
 import json
 from abc import ABC, abstractmethod
 
-# Singleton para garantir que só haja uma instância do Quiz
+# 1 - Singleton para garantir que só haja uma instância do Quiz
 class Quiz:
     _instance = None
 
@@ -22,7 +22,7 @@ class Quiz:
         return self._dados
 
 
-# Builder para construir quizzes com base na dificuldade e categoria
+# 2 - Builder para construir quizzes com base na dificuldade e categoria
 class QuizBuilder:
     def __init__(self):
         self.dificuldade = None
@@ -66,7 +66,7 @@ class Categoria:
         self.perguntas = [PerguntaFactory.criar(p) for p in perguntas]
 
 
-# Factory para criar instâncias de Pergunta
+# 3 - Factory para criar instâncias de Pergunta
 class PerguntaFactory:
     @staticmethod
     def criar(dados_pergunta):
@@ -90,7 +90,7 @@ class Pergunta:
         return self.alternativas[indice_resposta]["correct"]
 
 
-# Observer para pontuação
+# 4 - Observer para pontuação
 class ObservadorPontuacao(ABC):
     @abstractmethod
     def atualizar(self, acertos, total):
@@ -136,7 +136,6 @@ class GerenciadorQuiz:
 
 
 
-# Exemplo de uso
 if __name__ == '__main__':
     quiz = Quiz()
     quiz.carregar_dados('./quiz.json')
