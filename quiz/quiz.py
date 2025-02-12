@@ -1,150 +1,92 @@
 import json
+import random
 from abc import ABC, abstractmethod
 
-# 1 - Singleton para garantir que só haja uma instância do Quiz
-class Quiz:
+# 1 - Singleton - Gerenciador do Quiz
+class QuizManager:
     _instance = None
-
+    
     def __new__(cls):
         if cls._instance is None:
-            cls._instance = super(Quiz, cls).__new__(cls)
-            cls._instance._dados = None
+            cls._instance = super(QuizManager, cls).__new__(cls)
+            cls._instance.load_questions()
         return cls._instance
+    
+    def load_questions(self):
+        with open("quiz.json", "r", encoding="utf-8") as file:
+            self.quiz_data = json.load(file)["quiz"]["dificuldade"]
+    
+    def get_questions(self, difficulty, category):
+        return self.quiz_data[difficulty][category]
 
-    def carregar_dados(self, caminho_arquivo):
-        with open(caminho_arquivo, 'r', encoding='utf-8') as arquivo:
-            self._dados = json.load(arquivo)
-
-    @property
-    def dados(self):
-        if self._dados is None:
-            raise ValueError("Os dados do quiz ainda não foram carregados.")
-        return self._dados
-
-
-# 2 - Builder para construir quizzes com base na dificuldade e categoria
-class QuizBuilder:
-    def __init__(self):
-        self.dificuldade = None
-        self.categoria = None
-
-    def set_dificuldade(self, dificuldade):
-        if(dificuldade == "1"):
-            dificuldade = "facil"
-        elif(dificuldade == "2"):
-            dificuldade = "medio"
-        elif(dificuldade == "3"):
-            dificuldade = "dificil"
-        else: 
-            raise ValueError("Dificuldade inválida")
-        self.dificuldade = dificuldade
-        return self
-
-    def set_categoria(self, categoria):
-        if(categoria == "1"):
-            categoria = "geral"
-        elif(categoria == "2"):
-            categoria = "clubes"
-        else: 
-            raise ValueError("Categoria inválida")
-        self.categoria = categoria
-        return self
-
-    def construir(self):
-        if not self.dificuldade or not self.categoria:
-            raise ValueError("Dificuldade e categoria devem ser definidas.")
-        
-        quiz = Quiz()
-        perguntas = quiz.dados["quiz"]["dificuldade"].get(self.dificuldade, {}).get(self.categoria, [])
-        return Categoria(self.categoria, perguntas)
-
-
-# Categoria representa um conjunto de perguntas
-class Categoria:
-    def __init__(self, nome, perguntas):
-        self.nome = nome
-        self.perguntas = [PerguntaFactory.criar(p) for p in perguntas]
-
-
-# 3 - Factory para criar instâncias de Pergunta
-class PerguntaFactory:
+# 2 - Factory Method - Criação das Perguntas
+class QuestionFactory:
     @staticmethod
-    def criar(dados_pergunta):
-        return Pergunta(
-            pergunta=dados_pergunta["pergunta"],
-            alternativas=dados_pergunta["alternativas"]
-        )
+    def create_question(question_data):
+        return Question(question_data)
 
+# Classe de Pergunta
+class Question:
+    def __init__(self, data):
+        self.text = data["pergunta"]
+        self.options = data["alternativas"]
+    
+    def display(self):
+        print(self.text)
+        for idx, option in enumerate(self.options, 1):
+            print(f"{idx}. {option['alt']}")
+    
+    def check_answer(self, user_answer):
+        return self.options[user_answer - 1]["correct"]
 
-class Pergunta:
-    def __init__(self, pergunta, alternativas):
-        self.pergunta = pergunta
-        self.alternativas = alternativas
-
-    def exibir(self):
-        print(f"\n{self.pergunta}")
-        for i, alt in enumerate(self.alternativas, start=1):
-            print(f"{i}. {alt['alt']}")
-
-    def verificar_resposta(self, indice_resposta):
-        return self.alternativas[indice_resposta]["correct"]
-
-
-# 4 - Observer para pontuação
-class ObservadorPontuacao(ABC):
+# 3 - Strategy - Diferentes modos de quiz
+class QuizStrategy(ABC):
     @abstractmethod
-    def atualizar(self, acertos, total):
+    def execute(self, questions):
         pass
 
+class RandomQuizStrategy(QuizStrategy):
+    def execute(self, questions):
+        return random.sample(questions, len(questions))
 
-class Pontuacao(ObservadorPontuacao):
-    def __init__(self):
-        self.acertos = 0
-        self.erros = 0
+class OrderedQuizStrategy(QuizStrategy):
+    def execute(self, questions):
+        return questions
 
-    def atualizar(self, acertos, total):
-        self.acertos += acertos
-        self.erros += total - acertos
+# 4 - Observer - Observa respostas
+class QuizObserver:
+    def update(self, question, correct):
+        if correct:
+            print("Resposta correta!\n")
+        else:
+            print("Resposta incorreta.\n")
 
-    def exibir_resultado(self):
-        print("\nRESULTADO FINAL:")
-        print(f"Acertos: {self.acertos}")
-        print(f"Erros: {self.erros}")
-
-
-# Classe para gerenciar o fluxo do quiz
-class GerenciadorQuiz:
-    def __init__(self, categoria):
-        self.categoria = categoria
-        self.pontuacao = Pontuacao()
-
-    def iniciar(self):
-        total_perguntas = len(self.categoria.perguntas)
-        acertos = 0
-
-        for pergunta in self.categoria.perguntas:
-            pergunta.exibir()
-            resposta = int(input("Escolha a resposta (número): ")) - 1
-            if pergunta.verificar_resposta(resposta):
-                print("Correto!")
-                acertos += 1
-            else:
-                print("Errado!")
-
-        self.pontuacao.atualizar(acertos, total_perguntas)
-        self.pontuacao.exibir_resultado()
-
-
-
-if __name__ == '__main__':
-    quiz = Quiz()
-    quiz.carregar_dados('./quiz.json')
-
-    builder = QuizBuilder()
+# 5 - Template Method - Fluxo do Quiz
+class Quiz:
+    def __init__(self, difficulty, category, strategy):
+        self.manager = QuizManager()
+        self.questions = self.manager.get_questions(difficulty, category)
+        self.strategy = strategy
+        self.observer = QuizObserver()
     
-    dificuldade = input("Escolha a dificuldade (1 - Fácil, 2 - Médio, 3 - Difícil): ")
-    categoria = input("Escolha a categoria (1 - Geral, 2 - Clubes): ")
-    quizbuildado = builder.set_dificuldade(dificuldade).set_categoria(categoria).construir()
+    def run(self):
+        ordered_questions = self.strategy.execute(self.questions)
+        for q_data in ordered_questions:
+            question = QuestionFactory.create_question(q_data)
+            question.display()
+            try:
+                user_answer = int(input("Sua resposta: "))
+                correct = question.check_answer(user_answer)
+                self.observer.update(question, correct)
+            except (ValueError, IndexError):
+                print("Resposta inválida!\n")
 
-    gerenciador = GerenciadorQuiz(quizbuildado)
-    gerenciador.iniciar()
+# Execução do Quiz
+if __name__ == "__main__":
+    difficulty = input("Escolha a dificuldade (facil, medio, dificil): ")
+    category = input("Escolha a categoria (geral, clubes): ")
+    strategy_choice = input("Modo de quiz (1- Aleatório, 2- Ordenado): ")
+    strategy = RandomQuizStrategy() if strategy_choice == "1" else OrderedQuizStrategy()
+    
+    quiz = Quiz(difficulty, category, strategy)
+    quiz.run()
